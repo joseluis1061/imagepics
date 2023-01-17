@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path');
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 // Detecta si la app corre sobre una Mac
@@ -47,11 +48,12 @@ app.on('window-all-closed', ()=>{
 });
 
 // Evento desde el backend
+// Si desde el backend detecto un evento ping en el front
 ipcMain.on('ping', (event, arg) => {
-  //Recibe el evento
-  console.log(`Se recibio ping -- ${arg}`);
+  // Verifico la información que me llego desde el frontend
+  console.log(`ping recibido en el backend: \n ${arg}`);
 
-  //Envia una respuesta
+  // Envia una respuesta del backend al frontend
   event.sender.send('pong', new Date());
 })
 

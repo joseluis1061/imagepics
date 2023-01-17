@@ -2,24 +2,20 @@
 
 const { contextBridge, ipcRenderer } = require('electron')
 
-// contextBridge.exposeInIsolatedWorld(
-//   1004,
-//   'electron',
-//   {
-//     doThing: () => ipcRenderer.send('do-a-thing')
-//   }
-// )
-
-
-
+// Recibe un mensaje desde el backend de node JS
 function setIpc () {
+    // Si se produce un evento pong recibira el evento y un argumento
+    // El argumento esperado es la fecha desde el backend
     ipcRenderer.on('pong', (event, arg) => {
-        console.log(`Pong recibido -- {arg}`);
+        console.log(`pong recibido en el frontend \n${arg}`);
     })
 }
 
-// Desde el frontend vamos a enviar una fecha
+// Envia un mensaje al backend con la fecha como dato adicional
 function sendIpc () {
+    console.log('sendIpc')
+
+    // Al ejecutar esta función enviamos un mensaje y la fecha cuando se produjo
     ipcRenderer.send('ping', new Date());
 }
 

@@ -117,10 +117,13 @@ function selectEvent () {
   });
 }
 
-//comunicación entre procesos
+// Comunicación entre procesos frontend a backend
 function openDirectory () {
+  // Detectamos el botón
   const openDirectory = document.getElementById('open-directory')
+  // Si damos click sobre el 
   openDirectory.addEventListener('click', () => {
+    // Enviamos un mensaje desde el frontend al backend
     sendIpc();
   })
 }
