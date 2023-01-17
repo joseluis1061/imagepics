@@ -1,0 +1,20 @@
+{
+  "name": "imagespicks",
+  "version": "1.0.0",
+  "description": "DesktopApp make in electron for apply filters on images.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "electron src/index.js",
+    "lint": "standard",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "Jose Luis Zúñiga <joseluis836@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^22.0.2",
+    "standard": "^17.0.0"
+  }
+}
