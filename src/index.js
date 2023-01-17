@@ -1,6 +1,6 @@
 'use strict'
 const path = require('path');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 
 // Detecta si la app corre sobre una Mac
 const isMac = process.platform === 'darwin';
@@ -45,4 +45,13 @@ app.on('window-all-closed', ()=>{
     app.quit(); //Cerrar todas las ventanas
   }
 });
+
+// Evento desde el backend
+ipcMain.on('ping', (event, arg) => {
+  //Recibe el evento
+  console.log(`Se recibio ping -- ${arg}`);
+
+  //Envia una respuesta
+  event.sender.send('pong', new Date());
+})
 

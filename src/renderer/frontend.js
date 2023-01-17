@@ -5,12 +5,19 @@ const path = require('path');
 //import url from 'url';
 const url = require('url');
 
+// Función para aplicar filtros
 const applyFilter = require('./filters');
 
+// Comunicación entre procesos Frontend / Backend
+const { setIpc, sendIpc } = require('./ipcRendererEvents');
+
+
 window.addEventListener('load', () => {
+  setIpc(); //Comunicación entre eventos
   addImagesEvents();
   serchImagesEvent();
   selectEvent();
+  openDirectory();
 })
 
 // Agrega el evento click a toda la lista de imagenes
@@ -97,12 +104,23 @@ function selectFirstImage () {
 }
 
 
-//Eventos para selección del filtro
+//Evento: Selección del filtro al cambiar la etiqueta select
 function selectEvent () {
+  // Traer el elemento filters
   const select = document.getElementById('filters');
+  // Ubicamos la imagen que actualmente esta seleccionada
   const currentImage = document.getElementById('image-displayed');
+  // Cuando el usuario elija un filtro
   select.addEventListener('change', function () {
+    // Aplicar el filtro elegido a la imagen actual 
     applyFilter.applyFilter(this.value, currentImage)
   });
+}
 
+//comunicación entre procesos
+function openDirectory () {
+  const openDirectory = document.getElementById('open-directory')
+  openDirectory.addEventListener('click', () => {
+    sendIpc();
+  })
 }
