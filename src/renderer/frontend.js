@@ -81,7 +81,7 @@ function serchImagesEvent () {
       const hidden = document.querySelectorAll('li.hidden');
       // Iteramos sobre ellos
       for (let i = 0, length1 = hidden.length; i < length1; i++){
-         // Elimina la clase hidden de la etiqueta li
+        // Elimina la clase hidden de la etiqueta li
         hidden[i].classList.remove('hidden');
       }
     }
