@@ -1,15 +1,18 @@
 'use strict'
 const path = require('path');
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 
 // Detecta si la app corre sobre una Mac
 const isMac = process.platform === 'darwin';
 // Detectar si estamos en modo de desarrollo
 const isDev = process.env.NODE_ENV !== 'production';
 
+// Ventana principal
+let win
+
 function createMainWindow() {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     title: 'Images Resizes',
     width: isDev ? 800:1000,
     height: 600,
@@ -55,5 +58,27 @@ ipcMain.on('ping', (event, arg) => {
 
   // Envia una respuesta del backend al frontend
   event.sender.send('pong', new Date());
+})
+
+// Abrir un directorio con el evento open-directory
+ipcMain.on('open-directory', (event) => {
+  // Abro una ventana de dialogo para seleccionar el directorio
+  // Requiere la ventana desde donde se llamara y opciones del dialogo
+  dialog.showOpenDialog( win, {
+    // Titulo de la ventana de dialogo
+    title: 'Selecciona un directorio',
+    // Texto del botón principal
+    buttonLabel: 'Abrir',
+    // Que tipo de archivos puede seleccionar
+    properties: ['openFile', 'openDirectory']
+  }).then(result => {
+    // Es una promesa y por lo tanto retorna un resultado con diferente información
+    console.log(result.canceled); // si el diálogo fue o no cancelado
+    console.log(result.filePaths) // Arreglo rutas a los archivos elegidos
+    console.log(result.bookmarks ) // Arreglo rutas a los archivos elegidos en Mac
+  }).catch(err => {
+    console.log(err)
+  })  
+  
 })
 

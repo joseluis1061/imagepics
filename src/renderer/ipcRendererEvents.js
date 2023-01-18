@@ -15,11 +15,18 @@ function setIpc () {
 function sendIpc () {
     console.log('sendIpc')
 
-    // Al ejecutar esta función enviamos un mensaje y la fecha cuando se produjo
+    // Al ejecutar esta función desencadeno el evento ping y envio la fecha
     ipcRenderer.send('ping', new Date());
+}
+
+// Abrir un directorio
+function openDirectory () {
+    // Al ejecutar esta función se desencadena el evento open-directory
+    ipcRenderer.send('open-directory');
 }
 
 module.exports={
     setIpc: setIpc,
-    sendIpc: sendIpc
+    sendIpc: sendIpc,
+    openDirectory: openDirectory
 }
