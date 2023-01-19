@@ -139,3 +139,4 @@ function buttonEvent (id, func) {
   // 1. 'open-directory': Abrir un directorio
   openDirectory.addEventListener('click', func)
 }
+

@@ -5,8 +5,7 @@ const path = require('path');
 const fs = require('fs')
 // Modulo para verificar si un archivo es de tipo imagen
 const isImage = require('is-image');
-
-//import {filesize} from "filesize";
+// Permite traducir información de tamaños a un formato humano
 const filesize = require("filesize");
 
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
@@ -110,10 +109,11 @@ ipcMain.on('open-directory', (event) => {
             })
           }
         }
-        console.log(images)
+        // Enviamos las imagenes cargadas al frontend que esta
+        // atento al evento load-images
+        event.sender.send('load-images', images);
       });
     }
-  
   }).catch(err => {
     console.log(err)
   })  
