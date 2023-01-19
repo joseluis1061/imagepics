@@ -76,22 +76,32 @@ function addImagesEvents () {
   
   // Función para cambiar imagen seleccionada aazul
   function changeImages(node){
-    if(node){
-      // Detectamos el elemnto li con la clase selected 
-      const selected = document.querySelector('li.selected')
-      // Si hay al menos uno
-      if(selected){
-        // Le eliminamos la clase
-        selected.classList.remove('selected');
-      }      
-      // Luego se la agregamos al nodo donde dimos click
-      node.classList.add('selected');
-      // Y cambiamos la imagen que tenemos actualmente en pantalla por la del nodo
-      document.getElementById('image-displayed').src = node.querySelector('img').src;
-    }else{
-      document.getElementById('image-displayed').src = '';
-    }
+  if(node){
+    // Detectamos el elemnto li con la clase selected 
+    const selected = document.querySelector('li.selected')
+    // Si hay al menos uno
+    if(selected){
+      // Le eliminamos la clase
+      selected.classList.remove('selected');
+    }      
+    // Luego se la agregamos al nodo donde dimos click
+    node.classList.add('selected');
+    // Y cambiamos la imagen que tenemos actualmente en pantalla por la del nodo
+    document.getElementById('image-displayed').src = node.querySelector('img').src;
+  }else{
+    document.getElementById('image-displayed').src = '';
   }
+}
+
+//Selecciona la primera imagen que coincida con lo escrito en la barra 
+// de busqueda
+function selectFirstImage () {
+  //Selecciona la imagen que no tenga la clase hidden
+  const image = document.querySelector('li.list-group-item:not(.hidden)')
+  // Cambia la imagen de la ventana principal
+  changeImages(image);
+}
+
 
 // Recibe las imagenes que se cargan desde el backend al seleccionar un directorio
 function setIpc () {
@@ -103,6 +113,8 @@ function setIpc () {
         loadImages (images);
         // Agregar los eventos de selección a una imagen
         addImagesEvents();
+        // La primer imagen de la lista quedara seleccionada
+        selectFirstImage();
     })
 }
 
