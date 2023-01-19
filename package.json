@@ -16,5 +16,9 @@
   "devDependencies": {
     "electron": "^22.0.2",
     "standard": "^17.0.0"
+  },
+  "dependencies": {
+    "filesize": "^10.0.6",
+    "is-image": "^3.1.0"
   }
 }

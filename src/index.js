@@ -1,5 +1,10 @@
 'use strict'
+// Rutas de un archivo
 const path = require('path');
+// File sistem para leer archivos
+const fs = require('fs')
+// Modulo para verificar si un archivo es de tipo imagen
+const isImage = require('is-image');
 
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 
@@ -76,9 +81,19 @@ ipcMain.on('open-directory', (event) => {
     console.log(result.canceled); // si el diálogo fue o no cancelado
     console.log(result.filePaths) // Arreglo rutas a los archivos elegidos
     console.log(result.bookmarks ) // Arreglo rutas a los archivos elegidos en Mac
+    const dir = result.filePaths;
+    // Arra
+    // Si obtuvimos rutas de archivos
+    if (dir.length > 0){
+      // Leer el primer directorio elegido
+      fs.readdir(dir[0], (err, files) => {
+        // Impromir los nombres de archivos dentro del directorio
+        console.log(files)
+      });
+    }
+  
   }).catch(err => {
     console.log(err)
   })  
-  
 })
 
