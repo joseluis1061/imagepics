@@ -6,6 +6,9 @@ const fs = require('fs')
 // Modulo para verificar si un archivo es de tipo imagen
 const isImage = require('is-image');
 
+//import {filesize} from "filesize";
+const filesize = require("filesize");
+
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 
 // Detecta si la app corre sobre una Mac
@@ -82,13 +85,32 @@ ipcMain.on('open-directory', (event) => {
     console.log(result.filePaths) // Arreglo rutas a los archivos elegidos
     console.log(result.bookmarks ) // Arreglo rutas a los archivos elegidos en Mac
     const dir = result.filePaths;
-    // Arra
+    // Array con imagenes
+    const images = [];
     // Si obtuvimos rutas de archivos
     if (dir.length > 0){
       // Leer el primer directorio elegido
       fs.readdir(dir[0], (err, files) => {
-        // Impromir los nombres de archivos dentro del directorio
-        console.log(files)
+        // Recorrer todos los archivos leidos
+        for (let i = 0; i < files.length; i++){
+          // Seleccionar solo los que sen de tipo imagen
+          if(isImage(files[i])){
+            // Me retorna la ruta de la imagen
+            let imagesFile = path.join(dir[0], files[i]);
+            // Los stats son estadisticas de un archivo
+            // Nos intereza su tamaño
+            let stats = fs.statSync(imagesFile);
+            // Me retorna el tamaño de la imagem en un formato humano
+            let size = filesize.filesize( stats.size, {round:0});
+            // Agrego la ruta de la imagen y su tamaño al array de imagenes
+            images.push({
+              filename:files[i], 
+              src : `file://${imagesFile}`,
+              size: size
+            })
+          }
+        }
+        console.log(images)
       });
     }
   
