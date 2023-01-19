@@ -55,8 +55,43 @@ function  loadImages (images) {
         // Le agrego como nodos hijos las imagenes que hemos creado
         imagesList.insertAdjacentHTML('beforeend', node);
     }
-    
 }
+
+// Agregar los eventos de selección con click a las imagenes
+// cargadas desde un directorio
+
+function addImagesEvents () {
+    // Selecciona todos los elementos lista de imagenes
+    const thumbs = document.querySelectorAll('li.list-group-item');
+    // Recorre todos los elementos y les agrega el evento click
+    for (let i = 0, length = thumbs.length; i < length; i++){
+      thumbs[i].addEventListener('click', function(){
+        // Al dar click sobre algun elemento de la lista (thumbs[i])
+        // Envia como parametro el actual thumbs this
+        // A una función encargada de cambiar la imagen
+        changeImages(this);
+      })
+    }
+  }
+  
+  // Función para cambiar imagen seleccionada aazul
+  function changeImages(node){
+    if(node){
+      // Detectamos el elemnto li con la clase selected 
+      const selected = document.querySelector('li.selected')
+      // Si hay al menos uno
+      if(selected){
+        // Le eliminamos la clase
+        selected.classList.remove('selected');
+      }      
+      // Luego se la agregamos al nodo donde dimos click
+      node.classList.add('selected');
+      // Y cambiamos la imagen que tenemos actualmente en pantalla por la del nodo
+      document.getElementById('image-displayed').src = node.querySelector('img').src;
+    }else{
+      document.getElementById('image-displayed').src = '';
+    }
+  }
 
 // Recibe las imagenes que se cargan desde el backend al seleccionar un directorio
 function setIpc () {
@@ -65,7 +100,9 @@ function setIpc () {
         // Borrar la lista anterior
         clearImages();
         // Agregamos la nueva lista de imagenes
-        loadImages (images)
+        loadImages (images);
+        // Agregar los eventos de selección a una imagen
+        addImagesEvents();
     })
 }
 
