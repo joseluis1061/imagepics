@@ -108,9 +108,21 @@ function searchImagesEvent () {
   });
 }
 
+// Función que elimina todas las imagenes cargadas en la lista
+// Sirve para actualizar los datos al seleccionar un nuevo directorio
+function clearImages () {
+  // Selecciono el contenedor de las imagenes
+  const oldImages = document.querySelectorAll('li.list-group-item');
+  // Borro los hijos de los nodos para quitar las imagenes
+  for (let i = 0; i < oldImages.length; i ++){
+    oldImages[i].parentNode.removeChild(oldImages[i])
+  }
+}
+
 module.exports = {
   addImagesEvents: addImagesEvents,
   changeImages: changeImages,
+  clearImages: clearImages, 
   selectFirstImage: selectFirstImage,
   selectEvent: selectEvent, 
   searchImagesEvent: searchImagesEvent

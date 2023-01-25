@@ -1,7 +1,7 @@
 //import { ipcRenderer } from "electron";
 
 const { contextBridge, ipcRenderer } = require('electron');
-const { addImagesEvents, selectFirstImage } = require('./images-ui');
+const { addImagesEvents, selectFirstImage, clearImages } = require('./images-ui');
 
 // Recibe un mensaje desde el backend de node JS
 // function setIpc () {
@@ -25,16 +25,7 @@ function openDirectory () {
     ipcRenderer.send('open-directory');
 }
 
-// Función que elimina todas las imagenes cargadas en la lista
-// Sirve para actualizar los datos al seleccionar un nuevo directorio
-function clearImages () {
-    // Selecciono el contenedor de las imagenes
-    const oldImages = document.querySelectorAll('li.list-group-item');
-    // Borro los hijos de los nodos para quitar las imagenes
-    for (let i = 0; i < oldImages.length; i ++){
-      oldImages[i].parentNode.removeChild(oldImages[i])
-    }
-}
+
 
 // Función para crear los nodos html con las imagenes cuando se 
 // actualiza un directorio
