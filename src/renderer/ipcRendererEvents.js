@@ -1,7 +1,7 @@
 //import { ipcRenderer } from "electron";
 
 const { contextBridge, ipcRenderer } = require('electron');
-const { addImagesEvents, selectFirstImage, clearImages } = require('./images-ui');
+const { addImagesEvents, selectFirstImage, clearImages, loadImages } = require('./images-ui');
 
 // Recibe un mensaje desde el backend de node JS
 // function setIpc () {
@@ -21,35 +21,9 @@ function sendIpc () {
 
 // Abrir un directorio
 function openDirectory () {
-    // Al ejecutar esta función se desencadena el evento open-directory
-    ipcRenderer.send('open-directory');
+  // Al ejecutar esta función se desencadena el evento open-directory
+  ipcRenderer.send('open-directory');
 }
-
-
-
-// Función para crear los nodos html con las imagenes cuando se 
-// actualiza un directorio
-function  loadImages (images) {
-    // Seleccionamos el nodo padre donde ingresaremos las imagenes
-    const imagesList = document.querySelector('ul.list-group');
-
-    // Crea los nodos para cada imagene en la lista
-    for (let i = 0; i < images.length; i ++){        
-        const node =`
-            <li class="list-group-item">
-                <img class="media-object pull-left" src=${images[i].src} height="32">
-                <div class="media-body">
-                <strong>${ images[i].filename }</strong>
-                <p>${ images[i].size }</p>
-                </div>
-            </li>
-        `
-        // Le agrego como nodos hijos las imagenes que hemos creado
-        imagesList.insertAdjacentHTML('beforeend', node);
-    }
-}
-
-
 
 // Recibe las imagenes que se cargan desde el backend al seleccionar un directorio
 function setIpc () {

@@ -119,10 +119,33 @@ function clearImages () {
   }
 }
 
+// Función para crear los nodos html con las imagenes cuando se 
+// actualiza un directorio
+function  loadImages (images) {
+  // Seleccionamos el nodo padre donde ingresaremos las imagenes
+  const imagesList = document.querySelector('ul.list-group');
+
+  // Crea los nodos para cada imagene en la lista
+  for (let i = 0; i < images.length; i ++){        
+      const node =`
+          <li class="list-group-item">
+              <img class="media-object pull-left" src=${images[i].src} height="32">
+              <div class="media-body">
+              <strong>${ images[i].filename }</strong>
+              <p>${ images[i].size }</p>
+              </div>
+          </li>
+      `
+      // Le agrego como nodos hijos las imagenes que hemos creado
+      imagesList.insertAdjacentHTML('beforeend', node);
+  }
+}
+
 module.exports = {
   addImagesEvents: addImagesEvents,
   changeImages: changeImages,
   clearImages: clearImages, 
+  loadImages: loadImages,
   selectFirstImage: selectFirstImage,
   selectEvent: selectEvent, 
   searchImagesEvent: searchImagesEvent
