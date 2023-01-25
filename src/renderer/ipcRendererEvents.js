@@ -1,6 +1,7 @@
 //import { ipcRenderer } from "electron";
 
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
+const { addImagesEvents, selectFirstImage } = require('./images-ui');
 
 // Recibe un mensaje desde el backend de node JS
 // function setIpc () {
@@ -57,50 +58,6 @@ function  loadImages (images) {
     }
 }
 
-// Agregar los eventos de selección con click a las imagenes
-// cargadas desde un directorio
-
-function addImagesEvents () {
-    // Selecciona todos los elementos lista de imagenes
-    const thumbs = document.querySelectorAll('li.list-group-item');
-    // Recorre todos los elementos y les agrega el evento click
-    for (let i = 0, length = thumbs.length; i < length; i++){
-      thumbs[i].addEventListener('click', function(){
-        // Al dar click sobre algun elemento de la lista (thumbs[i])
-        // Envia como parametro el actual thumbs this
-        // A una función encargada de cambiar la imagen
-        changeImages(this);
-      })
-    }
-  }
-  
-  // Función para cambiar imagen seleccionada aazul
-  function changeImages(node){
-  if(node){
-    // Detectamos el elemnto li con la clase selected 
-    const selected = document.querySelector('li.selected')
-    // Si hay al menos uno
-    if(selected){
-      // Le eliminamos la clase
-      selected.classList.remove('selected');
-    }      
-    // Luego se la agregamos al nodo donde dimos click
-    node.classList.add('selected');
-    // Y cambiamos la imagen que tenemos actualmente en pantalla por la del nodo
-    document.getElementById('image-displayed').src = node.querySelector('img').src;
-  }else{
-    document.getElementById('image-displayed').src = '';
-  }
-}
-
-//Selecciona la primera imagen que coincida con lo escrito en la barra 
-// de busqueda
-function selectFirstImage () {
-  //Selecciona la imagen que no tenga la clase hidden
-  const image = document.querySelector('li.list-group-item:not(.hidden)')
-  // Cambia la imagen de la ventana principal
-  changeImages(image);
-}
 
 
 // Recibe las imagenes que se cargan desde el backend al seleccionar un directorio

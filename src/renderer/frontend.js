@@ -3,12 +3,12 @@ const { setIpc, sendIpc, openDirectory } = require('./ipcRendererEvents');
 
 //import imagesUi from './images-ui';
 // Importar modulo de funciones del renderer
-const { addImagesEvents, selectEvent, serchImagesEvent } = require('./images-ui');
+const { addImagesEvents, selectEvent, searchImagesEvent } = require('./images-ui');
 
 window.addEventListener('load', () => {
   setIpc(); //Comunicación entre eventos
   addImagesEvents();
-  serchImagesEvent();
+  searchImagesEvent();
   selectEvent();
   buttonEvent('open-directory', openDirectory);
 })

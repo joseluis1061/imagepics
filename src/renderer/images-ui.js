@@ -23,11 +23,16 @@ function addImagesEvents () {
   }
 }
 
-// Función para cambiar imagenes
+// Función para cambiar imagen seleccionada a azul
 function changeImages(node){
   if(node){
-    // Detectamos el elemnto li con la clase selected y se la eliminamos
-    document.querySelector('li.selected').classList.remove('selected');
+    // Detectamos el elemnto li con la clase selected 
+    const selected = document.querySelector('li.selected')
+    // Si hay al menos uno
+    if(selected){
+      // Le eliminamos la clase
+      selected.classList.remove('selected');
+    }      
     // Luego se la agregamos al nodo donde dimos click
     node.classList.add('selected');
     // Y cambiamos la imagen que tenemos actualmente en pantalla por la del nodo
@@ -59,7 +64,7 @@ function selectEvent () {
 }
 
 //Función para buscar una imagen especifica
-function serchImagesEvent () {
+function searchImagesEvent () {
   // Seleccionamos la barra de busqueda
   const searchBox = document.getElementById('search-box');
   // Evento que se ejecuta al presionar y liberar una tecla
@@ -108,5 +113,5 @@ module.exports = {
   changeImages: changeImages,
   selectFirstImage: selectFirstImage,
   selectEvent: selectEvent, 
-  serchImagesEvent: serchImagesEvent
+  searchImagesEvent: searchImagesEvent
 }
