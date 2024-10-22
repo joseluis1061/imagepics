@@ -126,7 +126,6 @@ ipcMain.on('open-directory', (event) => {
 
 // Dialogo para guardar imagen
 ipcMain.on('open-save-dialog', (event, ext)=> {
-  console.log("Extrenxion: ", ext);
   // Abro una ventana de dialogo para seleccionar el directorio
   // Requiere la ventana desde donde se llamara y opciones del dialogo
   dialog.showSaveDialog( win, {
@@ -151,4 +150,13 @@ ipcMain.on('open-save-dialog', (event, ext)=> {
   }).catch(err => {
     console.log(err)
   })  
+})
+
+// Ventanas de mensajes
+ipcMain.on('show-dialog', (event, options)=> {
+  dialog.showMessageBox(win, {
+    type: options.type,
+    title: options.title,
+    message: options.message
+  })
 })
