@@ -124,3 +124,31 @@ ipcMain.on('open-directory', (event) => {
   })  
 })
 
+// Dialogo para guardar imagen
+ipcMain.on('open-save-dialog', (event, ext)=> {
+  console.log("Extrenxion: ", ext);
+  // Abro una ventana de dialogo para seleccionar el directorio
+  // Requiere la ventana desde donde se llamara y opciones del dialogo
+  dialog.showSaveDialog( win, {
+    // Titulo de la ventana de dialogo
+    title: 'Guardar imagen',
+    // Texto del botón principal
+    buttonLabel: 'Guardar',
+    // Que tipo de archivos puede seleccionar
+    filters: [{name: 'Images', extensions: [ext.substr(1)]}]
+  }).then(result => {
+    // Si se cancela el guardado
+    if(result.canceled){
+      return;
+    }
+
+    const dir = result.filePath; // Directorio
+    console.log("Directorio: ", dir)
+    // Si obtuvimos rutas para guardar
+    if (dir.length > 0){
+      event.sender.send('save-img', dir)
+    }
+  }).catch(err => {
+    console.log(err)
+  })  
+})
