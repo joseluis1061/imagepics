@@ -14,17 +14,6 @@ window.addEventListener('load', () => {
   buttonEvent('save-button', saveFile);
 })
 
-// Comunicación entre procesos frontend a backend
-// function openDirectory () {
-//   // Detectamos el botón
-//   const openDirectory = document.getElementById('open-directory')
-//   // Si damos click sobre el 
-//   openDirectory.addEventListener('click', () => {
-//     // Enviamos un mensaje desde el frontend al backend
-//     sendIpc();
-//   })
-// }
-
 // Este boton puede recibir múltiples eventos.
 // Requiere:
 // id: Elemento del frontend que llama la función

@@ -9,7 +9,7 @@ const isImage = require('is-image');
 const filesize = require("filesize");
 
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-
+const setupErrors = require('./handle-errors');
 // Detecta si la app corre sobre una Mac
 const isMac = process.platform === 'darwin';
 // Detectar si estamos en modo de desarrollo
@@ -47,6 +47,8 @@ app.whenReady().then(() => {
     createMainWindow();
   }
   });
+
+  setupErrors(win);
 })
 
 // Evento: Verificar si todas la ventanas estan cerradas al cerrar la aplicación

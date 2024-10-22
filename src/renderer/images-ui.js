@@ -37,13 +37,15 @@ function changeImages(node){
     node.classList.add('selected');
     // Selección imagen original
     const image = document.getElementById('image-displayed');
-    console.log(`Imagen ${image} Ruta original ${image.src}`)
+    // console.log(`Imagen ${image} Ruta original ${image.src}`) // Falla por resolver con primera imagen
 
     // Cambia la imagen principal a la seleccionada
     image.src = node.querySelector('img').src;
 
     // Agregamos su src como un metadato de la etiqueta
     image.dataset.original = image.src;
+    // Iniciar el filtro de la imagen en 0 cada vez que se cambie de imagen
+    document.getElementById('filters').selectedIndex = 0;
     
   }else{
     document.getElementById('image-displayed').src = '';
