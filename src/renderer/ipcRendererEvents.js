@@ -2,8 +2,9 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 const { addImagesEvents, selectFirstImage, clearImages, loadImages } = require('./images-ui');
+const { saveImage }  = require('./filters');
 const path = require('node:path');
-const fs = require('node:fs');
+
 
 // Recibe un mensaje desde el backend de node JS
 // function setIpc () {
@@ -36,7 +37,7 @@ function saveFile (){
     ipcRenderer.send('open-save-dialog', ext);
 }
 
-// Recibe las imagenes que se cargan desde el backend al seleccionar un directorio
+// Escucha los eventos que se producen en el backend
 function setIpc () {
     // Si se produce un evento load-images recibimos las imagenes
     ipcRenderer.on('load-images', (event, images) => {
@@ -52,12 +53,9 @@ function setIpc () {
 
     // Detectar el directorio para guardar una imagen
     ipcRenderer.on('save-img', (event, dir) => {
-        console.log("Recibir directorio en el frontend: ", dir)
-        let fileSrc = document.getElementById('image-displayed').src;
-        fileSrc = fileSrc.replace(/^data:([/A-Za-z-+/]+);base64,/,'');
-        fs.writeFile(fileName, fileSrc, 'base64', (err)=> {
-            if(err) console.log("Error guardando la imagen ",err);
-        })
+        console.log("Recibir directorio en el frontend: ", dir);
+        saveImage(dir);
+
     })
 }
 

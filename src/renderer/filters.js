@@ -1,3 +1,5 @@
+const fs = require('node:fs');
+
 // Función para aplicar un filtro a una imagen
 // filter: Filtro seleccionado
 // currentImage: Imagen a la que se le aplica el filtro (Pantalla principal)
@@ -12,9 +14,32 @@ function applyFilter(filter, currentImage){
   .applyInstaFilter(filter)
   .renderHtml(currentImage);
 }
+
+function saveImage(fileName){
+  // Leemos la imagen
+  let fileSrc = document.getElementById('image-displayed').src;
+  // Obtenemos la información eb base 64 de esta imagen
+  fileSrc = fileSrc.replace(/^data:([A-Za-z-+/]+);base64,/,'');
+  // Guardamos la imagen en la direccion fileName con la información de fileSrc
+  fs.writeFile(fileName, fileSrc, 'base64', (err)=> {
+      if(err) console.log("Error guardando la imagen ",err);
+  })
+}
+
+// function saveImage(fileName,callback){
+//   let fileSrc=document.getElementById('image-displayed').src
+//   if(fileSrc.indexOf(';base64,')!==-1){
+//     fileSrc=fileSrc.replace(/^data:([A-Za-z-+/]+);base64,/,'')
+//     fs.writeFile(fileName,fileSrc,'base64',callback)}else{fileSrc=fileSrc.replace('plp://','')
+//     fs.copy(fileSrc,fileName,callback)
+//   }
+// }
 // Exportar el modelo
 //module.exports.applyFilter = applyFilter
-module.exports = {applyFilter:applyFilter}
+module.exports = {
+  applyFilter:applyFilter,
+  saveImage: saveImage
+}
 
 
 // import fs from 'fs-extra'
@@ -27,13 +52,6 @@ module.exports = {applyFilter:applyFilter}
 //   .renderHtml(currentImage)
 // }
 
-// function saveImage(fileName,callback){
-//   let fileSrc=document.getElementById('image-displayed').src
-//   if(fileSrc.indexOf(';base64,')!==-1){
-//     fileSrc=fileSrc.replace(/^data:([A-Za-z-+/]+);base64,/,'')
-//     fs.writeFile(fileName,fileSrc,'base64',callback)}else{fileSrc=fileSrc.replace('plp://','')
-//     fs.copy(fileSrc,fileName,callback)
-//   }
-// }
+
 
 // module.exports={applyFilter:applyFilter,saveImage:saveImage}
