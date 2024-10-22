@@ -9,7 +9,7 @@ const isImage = require('is-image');
 const filesize = require("filesize");
 
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-
+const setupErrors = require('./handle-errors');
 // Detecta si la app corre sobre una Mac
 const isMac = process.platform === 'darwin';
 // Detectar si estamos en modo de desarrollo
@@ -47,6 +47,8 @@ app.whenReady().then(() => {
     createMainWindow();
   }
   });
+
+  setupErrors(win);
 })
 
 // Evento: Verificar si todas la ventanas estan cerradas al cerrar la aplicación
@@ -83,7 +85,11 @@ ipcMain.on('open-directory', (event) => {
     console.log(result.canceled); // si el diálogo fue o no cancelado
     console.log(result.filePaths) // Arreglo rutas a los archivos elegidos
     console.log(result.bookmarks ) // Arreglo rutas a los archivos elegidos en Mac
-    const dir = result.filePaths;
+    const dir = result.filePaths; // Directorios
+    console.log("Directorio: ", dir)
+    if(result.canceled){
+      return;
+    }
     // Array con imagenes
     const images = [];
     // Si obtuvimos rutas de archivos
@@ -113,9 +119,46 @@ ipcMain.on('open-directory', (event) => {
         // atento al evento load-images
         event.sender.send('load-images', images);
       });
+      console.log(images)
     }
   }).catch(err => {
     console.log(err)
   })  
 })
 
+// Dialogo para guardar imagen
+ipcMain.on('open-save-dialog', (event, ext)=> {
+  // Abro una ventana de dialogo para seleccionar el directorio
+  // Requiere la ventana desde donde se llamara y opciones del dialogo
+  dialog.showSaveDialog( win, {
+    // Titulo de la ventana de dialogo
+    title: 'Guardar imagen',
+    // Texto del botón principal
+    buttonLabel: 'Guardar',
+    // Que tipo de archivos puede seleccionar
+    filters: [{name: 'Images', extensions: [ext.substr(1)]}]
+  }).then(result => {
+    // Si se cancela el guardado
+    if(result.canceled){
+      return;
+    }
+
+    const dir = result.filePath; // Directorio
+    console.log("Directorio: ", dir)
+    // Si obtuvimos rutas para guardar
+    if (dir.length > 0){
+      event.sender.send('save-img', dir)
+    }
+  }).catch(err => {
+    console.log(err)
+  })  
+})
+
+// Ventanas de mensajes
+ipcMain.on('show-dialog', (event, options)=> {
+  dialog.showMessageBox(win, {
+    type: options.type,
+    title: options.title,
+    message: options.message
+  })
+})

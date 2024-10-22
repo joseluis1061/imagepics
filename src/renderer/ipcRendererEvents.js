@@ -2,15 +2,36 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 const { addImagesEvents, selectFirstImage, clearImages, loadImages } = require('./images-ui');
+const { saveImage }  = require('./filters');
+const path = require('node:path');
+const { error } = require('node:console');
 
-// Recibe un mensaje desde el backend de node JS
-// function setIpc () {
-//     // Si se produce un evento pong recibira el evento y un argumento
-//     // El argumento esperado es la fecha desde el backend
-//     ipcRenderer.on('pong', (event, arg) => {
-//         console.log(`pong recibido en el frontend \n${arg}`);
-//     })
-// }
+function setIpc () {
+    // Si se produce un evento load-images recibimos las imagenes
+    ipcRenderer.on('load-images', (event, images) => {
+        // Borrar la lista anterior
+        clearImages();
+        // Agregamos la nueva lista de imagenes
+        loadImages (images);
+        // Agregar los eventos de selección a una imagen
+        addImagesEvents();
+        // La primer imagen de la lista quedara seleccionada
+        selectFirstImage();
+    })
+
+    // Detectar el directorio para guardar una imagen
+    ipcRenderer.on('save-img', (event, dir) => {
+        saveImage(dir, (err) => {
+            if (err) {
+              showDialog('error', 'ImaegePicks', 'Error al guardar la imagen');
+            } else {
+              showDialog('info', 'ImaegePicks', 'La imagen fue guardada correctamente');
+            }
+          });
+    })
+}
+
+// ENVIO DE EVENTOS DEL FRONTEND AL BACKEND
 
 // Envia un mensaje al backend con la fecha como dato adicional
 function sendIpc () {
@@ -25,23 +46,28 @@ function openDirectory () {
   ipcRenderer.send('open-directory');
 }
 
-// Recibe las imagenes que se cargan desde el backend al seleccionar un directorio
-function setIpc () {
-    // Si se produce un evento load-images recibimos las imagenes
-    ipcRenderer.on('load-images', (event, images) => {
-        // Borrar la lista anterior
-        clearImages();
-        // Agregamos la nueva lista de imagenes
-        loadImages (images);
-        // Agregar los eventos de selección a una imagen
-        addImagesEvents();
-        // La primer imagen de la lista quedara seleccionada
-        selectFirstImage();
-    })
+// Abrir ventana para obtener dirección de guardado
+function saveFile (){
+    // Obtenemos la imagen que esta en pantalla principal
+    const image = document.getElementById('image-displayed').dataset.original;
+    // extensión de la imagen
+    const ext = path.extname(image);
+    ipcRenderer.send('open-save-dialog', ext);
 }
 
+// Abrir ventanas de dialogos
+function showDialog (type, title, msg) {
+    ipcRenderer.send('show-dialog', {
+        type: type,
+        title: title,
+        message: msg
+    });
+}
+
+// Escucha los eventos que se producen en el backend de node js
 module.exports={
     setIpc: setIpc,
     sendIpc: sendIpc,
-    openDirectory: openDirectory
+    openDirectory: openDirectory,
+    saveFile: saveFile
 }

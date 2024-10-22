@@ -33,10 +33,20 @@ function changeImages(node){
       // Le eliminamos la clase
       selected.classList.remove('selected');
     }      
-    // Luego se la agregamos al nodo donde dimos click
+    // Agregamos al nodo donde dimos click la clase selected para que se vea con el recuadro azul
     node.classList.add('selected');
-    // Y cambiamos la imagen que tenemos actualmente en pantalla por la del nodo
-    document.getElementById('image-displayed').src = node.querySelector('img').src;
+    // Selección imagen original
+    const image = document.getElementById('image-displayed');
+    // console.log(`Imagen ${image} Ruta original ${image.src}`) // Falla por resolver con primera imagen
+
+    // Cambia la imagen principal a la seleccionada
+    image.src = node.querySelector('img').src;
+
+    // Agregamos su src como un metadato de la etiqueta
+    image.dataset.original = image.src;
+    // Iniciar el filtro de la imagen en 0 cada vez que se cambie de imagen
+    document.getElementById('filters').selectedIndex = 0;
+    
   }else{
     document.getElementById('image-displayed').src = '';
   }

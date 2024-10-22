@@ -1,5 +1,5 @@
 // Comunicación entre procesos Frontend / Backend
-const { setIpc, sendIpc, openDirectory } = require('./ipcRendererEvents');
+const { setIpc, sendIpc, openDirectory, saveFile } = require('./ipcRendererEvents');
 
 //import imagesUi from './images-ui';
 // Importar modulo de funciones del renderer
@@ -11,18 +11,8 @@ window.addEventListener('load', () => {
   searchImagesEvent();
   selectEvent();
   buttonEvent('open-directory', openDirectory);
+  buttonEvent('save-button', saveFile);
 })
-
-// Comunicación entre procesos frontend a backend
-// function openDirectory () {
-//   // Detectamos el botón
-//   const openDirectory = document.getElementById('open-directory')
-//   // Si damos click sobre el 
-//   openDirectory.addEventListener('click', () => {
-//     // Enviamos un mensaje desde el frontend al backend
-//     sendIpc();
-//   })
-// }
 
 // Este boton puede recibir múltiples eventos.
 // Requiere:
