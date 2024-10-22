@@ -83,7 +83,11 @@ ipcMain.on('open-directory', (event) => {
     console.log(result.canceled); // si el diálogo fue o no cancelado
     console.log(result.filePaths) // Arreglo rutas a los archivos elegidos
     console.log(result.bookmarks ) // Arreglo rutas a los archivos elegidos en Mac
-    const dir = result.filePaths;
+    const dir = result.filePaths; // Directorios
+    console.log("Directorio: ", dir)
+    if(result.canceled){
+      return;
+    }
     // Array con imagenes
     const images = [];
     // Si obtuvimos rutas de archivos
@@ -113,6 +117,7 @@ ipcMain.on('open-directory', (event) => {
         // atento al evento load-images
         event.sender.send('load-images', images);
       });
+      console.log(images)
     }
   }).catch(err => {
     console.log(err)
