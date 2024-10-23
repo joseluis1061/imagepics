@@ -1,4 +1,5 @@
-const fs = require('node:fs');
+// const fs = require('node:fs');
+const fs = require('fs-extra');
 
 // Función para aplicar un filtro a una imagen
 // filter: Filtro seleccionado
@@ -18,10 +19,20 @@ function applyFilter(filter, currentImage){
 function saveImage(fileName, callback){
   // Leemos la imagen
   let fileSrc = document.getElementById('image-displayed').src;
-  // Obtenemos la información eb base 64 de esta imagen
-  fileSrc = fileSrc.replace(/^data:([A-Za-z-+/]+);base64,/,'');
-  // Guardamos la imagen en la direccion fileName con la información de fileSrc
-  fs.writeFile(fileName, fileSrc, 'base64', callback);
+  
+  //Verificar si es una imagen con filtro o sin el
+  if(fileSrc.indexOf(';base64,')!==-1){
+    // Obtenemos la información eb base 64 de esta imagen
+    fileSrc = fileSrc.replace(/^data:([A-Za-z-+/]+);base64,/,'');
+    // Guardamos la imagen en la direccion fileName con la información de fileSrc
+    fs.writeFile(fileName, fileSrc, 'base64', callback);
+  }else{
+    console.log("FILESRC: ", fileSrc);
+    fileSrc=fileSrc.replace('file:///','');
+    fs.copy(fileSrc, fileName, callback);
+  }
+
+
 }
 
 // function saveImage(fileName,callback){
