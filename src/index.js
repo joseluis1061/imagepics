@@ -1,16 +1,11 @@
 'use strict'
 // Rutas de un archivo
 const path = require('path');
-// File sistem para leer archivos
-const fs = require('fs')
-// Modulo para verificar si un archivo es de tipo imagen
-const isImage = require('is-image');
-// Permite traducir información de tamaños a un formato humano
-const filesize = require("filesize");
-
 const setupErrors = require('./handle-errors');
-
 const setMainIpc = require('./ipcMainEvents');
+
+// Ventana principal
+let win
 
 const { app, BrowserWindow } = require('electron');
 // Detecta si la app corre sobre una Mac
@@ -18,8 +13,6 @@ const isMac = process.platform === 'darwin';
 // Detectar si estamos en modo de desarrollo
 const isDev = process.env.NODE_ENV !== 'production';
 
-// Ventana principal
-let win
 
 function createMainWindow() {
   win = new BrowserWindow({
@@ -28,21 +21,19 @@ function createMainWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      enableRemoteModule: true, // Habilitando remote module
     }
   });
 
   if(isDev){
     win.webContents.openDevTools();
   }
-
-
-  win.loadFile(path.join(__dirname, './renderer/index.html'));
+  win.loadFile(path.join(__dirname, './renderer/main-window/index.html'));
 };
 
 app.whenReady().then(() => {
   createMainWindow();
-
   // Este fragmento me garantiza que si no tengo ninguna ventana
   // Se cree una al activar la aplicación.
   app.on('activate', () => {
@@ -50,6 +41,10 @@ app.whenReady().then(() => {
     createMainWindow();
   }
   });
+
+  // Habilitar remote para esta ventana
+  require('@electron/remote/main').initialize();
+  require("@electron/remote/main").enable(win.webContents)
 
   setupErrors(win);
   setMainIpc(win);
@@ -62,4 +57,3 @@ app.on('window-all-closed', ()=>{
     app.quit(); //Cerrar todas las ventanas
   }
 });
-

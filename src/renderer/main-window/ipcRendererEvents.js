@@ -1,10 +1,11 @@
-//import { ipcRenderer } from "electron";
+// import { ipcRenderer } from "electron";
 
 const { contextBridge, ipcRenderer } = require('electron');
 const { addImagesEvents, selectFirstImage, clearImages, loadImages } = require('./images-ui');
 const { saveImage }  = require('./filters');
 const path = require('node:path');
 const { error } = require('node:console');
+
 
 function setIpc () {
     // Si se produce un evento load-images recibimos las imagenes
@@ -64,10 +65,27 @@ function showDialog (type, title, msg) {
     });
 }
 
+// Ventana de configuraciones
+function openPreferences() {
+    console.log("openPreferences");
+    const { BrowserWindow } = window.require("@electron/remote");  
+    const preferencesWindow = new BrowserWindow({
+      width: 400,
+      height: 300,
+      title: "Preferencias",
+      center: true,
+      modal: true,
+      frame: true,
+      show: false,
+    });
+    preferencesWindow.show();
+    preferencesWindow.loadURL(`file://${path.join(__dirname, '../prefs-window/preferences.html')}`);
+}
 // Escucha los eventos que se producen en el backend de node js
 module.exports={
     setIpc: setIpc,
     sendIpc: sendIpc,
     openDirectory: openDirectory,
+    openPreferences:openPreferences,
     saveFile: saveFile
 }

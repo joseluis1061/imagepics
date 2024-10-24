@@ -19,6 +19,7 @@
     "standard": "^17.0.0"
   },
   "dependencies": {
+    "@electron/remote": "^2.1.2",
     "filesize": "^10.0.6",
     "fs-extra": "^11.2.0",
     "is-image": "^3.1.0"

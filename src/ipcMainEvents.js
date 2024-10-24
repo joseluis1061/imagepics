@@ -9,9 +9,9 @@ const isImage = require('is-image');
 const filesize = require("filesize");
 
 function setMainIpc (win){
-    // Evento desde el backend
-// Si desde el backend detecto un evento ping en el front
-ipcMain.on('ping', (event, arg) => {
+  // Evento desde el backend
+  // Si desde el backend detecto un evento ping en el front
+  ipcMain.on('ping', (event, arg) => {
     // Verifico la información que me llego desde el frontend
     console.log(`ping recibido en el backend: \n ${arg}`);
   

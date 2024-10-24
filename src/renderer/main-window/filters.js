@@ -31,8 +31,6 @@ function saveImage(fileName, callback){
     fileSrc=fileSrc.replace('file:///','');
     fs.copy(fileSrc, fileName, callback);
   }
-
-
 }
 
 // function saveImage(fileName,callback){
