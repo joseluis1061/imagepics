@@ -5,7 +5,7 @@ const setupErrors = require('./handle-errors');
 const setMainIpc = require('./ipcMainEvents');
 
 // Ventana principal
-let win
+let win;
 
 const { app, BrowserWindow } = require('electron');
 // Detecta si la app corre sobre una Mac

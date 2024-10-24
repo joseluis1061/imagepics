@@ -4,6 +4,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 const { addImagesEvents, selectFirstImage, clearImages, loadImages } = require('./images-ui');
 const { saveImage }  = require('./filters');
 const path = require('node:path');
+const os = require('node:os');
 const { error } = require('node:console');
 
 
@@ -68,17 +69,34 @@ function showDialog (type, title, msg) {
 // Ventana de configuraciones
 function openPreferences() {
     console.log("openPreferences");
-    const { BrowserWindow } = window.require("@electron/remote");  
+    const {BrowserWindow, getGlobal, require} = window.require("@electron/remote");
+    const remoteMain = require("@electron/remote/main");
     const preferencesWindow = new BrowserWindow({
       width: 400,
       height: 300,
       title: "Preferencias",
       center: true,
       modal: true,
-      frame: true,
+      frame: false,
       show: false,
+      webPreferences: {
+        devTools: true
+    }
     });
-    preferencesWindow.show();
+    // Abrir DevTools automáticamente
+    preferencesWindow.webContents.openDevTools({ mode: 'detach' })
+
+    // Hacemos que sea una ventana hija de la ventana principal
+    // Ya no es necesario hacerlo
+    // if(os.platform() !== 'win32'){
+    //   remoteMain.enable(preferencesWindow.webContents);
+    // }
+
+    preferencesWindow.once('ready-to-show', () => {
+      preferencesWindow.show();
+      preferencesWindow.focus();
+    })
+
     preferencesWindow.loadURL(`file://${path.join(__dirname, '../prefs-window/preferences.html')}`);
 }
 // Escucha los eventos que se producen en el backend de node js
